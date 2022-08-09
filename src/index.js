@@ -24,9 +24,10 @@ async function run() {
                 pull_number: num,
             }
         );
-        // const { labels } = pr;
+        const { labels } = pr;
         core.info(JSON.stringify(pr));
-        // core.info(JSON.stringify(labels));
+        core.info("--------------------------------------------------------");
+        core.info(JSON.stringify(labels));
     } catch (err) {
         core.setFailed(err.message);
     }
