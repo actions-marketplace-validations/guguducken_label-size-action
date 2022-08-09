@@ -19,7 +19,7 @@ async function run() {
 
         for (const label of labels) {
             const { name } = label;
-            core.info(name === "kind/bug");
+            core.info(name);
         }
     } catch (err) {
         core.setFailed(err.message);
