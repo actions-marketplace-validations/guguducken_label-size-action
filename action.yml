@@ -1,0 +1,12 @@
+name: "Auto add size label"
+description: "Add labels based on pull request change sizes"
+# inputs:
+#   sizes:
+#     description: "Custom size configuration"
+#     required: false
+runs:
+  using: "node12"
+  main: "src/index.js"
+branding:
+  icon: "tag"
+  color: "blue"
