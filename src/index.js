@@ -24,8 +24,9 @@ async function run() {
                 pull_number: num,
             }
         );
-        const { label } = pr;
-        core.info(JSON.stringify(label));
+        const { labels } = pr;
+        core.info(JSON.stringify(pr));
+        core.info(JSON.stringify(labels));
     } catch (err) {
         core.setFailed(err.message);
     }
