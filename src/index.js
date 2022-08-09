@@ -18,13 +18,14 @@ async function run() {
         //get pull request num
         const num = context.payload?.pull_request?.number;
 
-        const { pr } = await octokit.rest.pulls.get(
+        const { data: pr } = await octokit.rest.pulls.get(
             {
                 ...context.repo,
                 pull_number: num,
             }
         );
-        core.info(JSON.stringify(pr));
+        const { label } = pr;
+        core.info(JSON.stringify(label));
     } catch (err) {
         core.setFailed(err.message);
     }
