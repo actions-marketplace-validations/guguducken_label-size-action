@@ -17,7 +17,10 @@ async function run() {
 
         const labels = context.payload?.pull_request?.labels;
 
-        core.info(labels.name);
+        for (const label of labels) {
+            const { name } = label;
+            core.info(name);
+        }
     } catch (err) {
         core.setFailed(err.message);
     }
