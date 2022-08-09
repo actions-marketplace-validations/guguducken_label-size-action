@@ -5,7 +5,7 @@ description: "Add labels based on pull request change sizes"
 #     description: "Custom size configuration"
 #     required: false
 inputs:
-  github_token:
+  size_token:
     description: "GitHub token for access GitHub repository"
     required: true
 runs:
