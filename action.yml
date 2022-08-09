@@ -8,6 +8,9 @@ inputs:
   size_token:
     description: "GitHub token for access GitHub repository"
     required: true
+  sizes:
+    description: "the size of different label"
+    required: false
 runs:
   using: "node16"
   main: "src/index.js"

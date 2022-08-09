@@ -12,9 +12,6 @@ async function run() {
         //get github context
         const context = github.context;
 
-        const repo_owner = context.repo.owner;
-        const repo_name = context.repo.repo;
-
         //get pull request num
         const num = context.payload?.pull_request?.number;
 
@@ -22,12 +19,13 @@ async function run() {
             {
                 ...context.repo,
                 pull_number: num,
+                mediaType: {
+                    format: 'diff'
+                }
             }
         );
-        const { labels } = pr;
         core.info(JSON.stringify(pr));
-        core.info("--------------------------------------------------------");
-        core.info(JSON.stringify(labels));
+        // const { labels } = pr;
     } catch (err) {
         core.setFailed(err.message);
     }
