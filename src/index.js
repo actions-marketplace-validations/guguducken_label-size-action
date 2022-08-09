@@ -19,14 +19,12 @@ async function run() {
             {
                 ...context.repo,
                 pull_number: num,
-                mediaType: {
-                    format: 'diff'
-                }
             }
         );
         core.info(JSON.stringify(pr));
-        // const { path, additions, deletions } = pr;
-        // core.info(JSON.stringify(path) + " " + JSON.stringify(additions) + " " + JSON.stringify(deletions));
+        core.info("-------------------------------------------");
+        const { path, additions, deletions } = pr;
+        core.info(JSON.stringify(path) + " " + JSON.stringify(additions) + " " + JSON.stringify(deletions));
         // const { labels } = pr;
     } catch (err) {
         core.setFailed(err.message);
