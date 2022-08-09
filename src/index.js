@@ -24,8 +24,9 @@ async function run() {
                 }
             }
         );
-        const { path, additions, deletions } = pr;
-        core.info(JSON.stringify(path) + " " + JSON.stringify(additions) + " " + JSON.stringify(deletions));
+        core.info(JSON.stringify(pr));
+        // const { path, additions, deletions } = pr;
+        // core.info(JSON.stringify(path) + " " + JSON.stringify(additions) + " " + JSON.stringify(deletions));
         // const { labels } = pr;
     } catch (err) {
         core.setFailed(err.message);
