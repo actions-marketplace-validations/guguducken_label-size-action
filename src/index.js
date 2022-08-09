@@ -17,7 +17,7 @@ async function run() {
 
         const labels = context.payload?.pull_request?.labels;
 
-        core.info(JSON.stringify(labels));
+        core.info(labels.name);
     } catch (err) {
         core.setFailed(err.message);
     }
