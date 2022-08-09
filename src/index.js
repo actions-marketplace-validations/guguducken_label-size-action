@@ -13,9 +13,9 @@ async function run() {
         const context = github.context;
 
         //get pull request num
-        const num = context?.payload?.pull_request?.number;
+        const num = context.payload?.pull_request?.number;
 
-        const labels = context?.pull_request?.labels;
+        const labels = context.payload?.pull_request?.labels;
 
         core.info(labels);
     } catch (err) {
