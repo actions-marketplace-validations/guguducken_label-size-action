@@ -1,7 +1,7 @@
 const core = require('@actions/core');
 const github = require('@actions/github');
 
-const github_token = core.getInput("size_token");
+const github_token = core.getInput("size_token", { required: true });
 
 async function run() {
 
