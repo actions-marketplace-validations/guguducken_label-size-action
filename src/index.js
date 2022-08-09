@@ -1,26 +1,30 @@
 const core = require('@actions/core');
 const github = require('@actions/github');
 
-// const github_token = core.getInput("SIZE_TOKEN");
+const github_token = core.getInput("github_token");
 
 async function run() {
 
     try {
         //get a octokit client
-        // const octokit = github.getOctokit(github_token);
+        const octokit = github.getOctokit(github_token, { userAgent: "guguducken/label-size-action" });
 
         //get github context
         const context = github.context;
 
+        const repo_owner = context.repo.owner;
+        const repo_name = context.repo.repo;
+
         //get pull request num
         const num = context.payload?.pull_request?.number;
 
-        const labels = context.payload?.pull_request?.labels;
-
-        for (const label of labels) {
-            const { name } = label;
-            core.info(name);
-        }
+        const { data: pr } = await octokit.rest.pulls.get(
+            {
+                ...context.repo,
+                pull_number: num,
+            }
+        );
+        core.info(JSON.stringify(pr));
     } catch (err) {
         core.setFailed(err.message);
     }

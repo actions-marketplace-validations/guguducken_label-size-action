@@ -4,6 +4,10 @@ description: "Add labels based on pull request change sizes"
 #   sizes:
 #     description: "Custom size configuration"
 #     required: false
+inputs:
+  github_token:
+    description: "GitHub token for access GitHub repository"
+    required: true
 runs:
   using: "node16"
   main: "src/index.js"
