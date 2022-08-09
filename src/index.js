@@ -17,7 +17,7 @@ async function run() {
 
         const labels = context.payload?.pull_request?.labels;
 
-        core.info(labels);
+        core.info(Array.from(labels));
     } catch (err) {
         core.setFailed(err.message);
     }
