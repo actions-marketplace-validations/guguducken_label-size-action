@@ -48,7 +48,8 @@ async function run() {
             }
         );
 
-        core.info(JSON.stringify(pr));
+        let { labels } = pr;
+        core.info(JSON.stringify(labels));
 
         //get the size of file changes, additions and deletions
         const { changedSize, additions, deletions } = getChangeSize(files);
