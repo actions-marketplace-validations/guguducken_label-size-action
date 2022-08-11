@@ -102,7 +102,7 @@ function getAddAndMove(labels, newLabel) {
     let add = [newLabel];
     let move = [];
     for (let i = 0; i < labels.length; i++) {
-        const name = labels[i].name;
+        const { name } = labels[i];
         if (name.startsWith("size/")) {
             if (name == newLabel) {
                 add.pop();
