@@ -3,7 +3,7 @@ const github = require('@actions/github');
 
 const github_token = core.getInput("size_token", { required: true });
 const ignoreStr = core.getInput('ignore');
-const size = core.getInput('size');
+const labelSize = JSON.parse(core.getInput('size'));
 
 async function run() {
 
@@ -35,6 +35,8 @@ async function run() {
 
         core.info("-----------------------------------------------------");
         core.info(changeSize);
+        core.info("-----------------------------------------------------");
+        core.info(labelSize);
     } catch (err) {
         core.setFailed(err.message);
     }
@@ -87,15 +89,27 @@ function getIgnoreRe(ignoreStr) {
 
 function getChangeSize(files, ignore) {
     let sum = 0;
-    for (const file of files) {
-        for (const re of ignore) {
-            re.lastIndex = 0;
-            if (re.test(file.filename)) {
-                sum += file.changes;
+    let additions = 0;
+    let deletions = 0;
+    if (ignore == undefined) {
+        for (const file of files) {
+            sum += file.changes;
+            additions += file.additions;
+            deletions += file.deletions;
+        }
+    } else {
+        for (const file of files) {
+            for (const re of ignore) {
+                re.lastIndex = 0;
+                if (re.test(file.filename)) {
+                    sum += file.changes;
+                    additions += file.additions;
+                    deletions += file.deletions;
+                }
             }
         }
     }
-    return sum;
+    return { sum, additions, deletions };
 }
 
 run();
