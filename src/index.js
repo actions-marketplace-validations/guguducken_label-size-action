@@ -3,7 +3,7 @@ const github = require('@actions/github');
 
 const github_token = core.getInput("size_token", { required: true });
 const ignoreStr = core.getInput("ignore");
-const labelSize = core.getInput("sizes");
+const labelSize = JSON.parse(core.getInput("sizes"));
 
 async function run() {
 
@@ -17,29 +17,47 @@ async function run() {
         //get pull request num
         const num = context.payload?.pull_request?.number;
 
+        if (num == undefined) {
+            core.info("This job is not triggered by PR");
+            return
+        }
+
+        core.info("----------------------------Labeler Start---------------------------");
+
         //get repo and owner
         const repo_name = context.repo.repo;
         const repo_owner = context.repo.owner;
 
+        core.info(`The target repository name is: ` + repo_name);
+        core.info(`The owner of this repository is: ` + repo_owner);
+        core.info(`The PR number of this job is: ` + num);
         let ignore_re = getIgnoreRe(ignoreStr);
 
+        //get files
         const { data: files } = await octokit.rest.pulls.listFiles(
             {
                 ...context.repo,
                 pull_number: num,
             }
         );
-        core.info(JSON.stringify(files));
 
-        const changeSize = getChangeSize(files);
+        const { data: pr } = await octokit.rest.pulls.get(
+            {
+                ...context.repo,
+                pull_number: num,
+            }
+        );
 
-        core.info("-----------------------------------------------------");
-        core.info(changeSize);
-        core.info("-----------------------------------------------------");
-        core.info(labelSize);
-        core.info("-----------------------------------------------------");
-        let ans = JSON.parse(labelSize);
-        core.info(ans.s);
+        core.info(JSON.stringify(pr));
+
+        //get the size of file changes, additions and deletions
+        const { changedSize, additions, deletions } = getChangeSize(files);
+        core.info("The additions of this PR: " + additions);
+        core.info("The deletions of this PR: " + deletions);
+        core.info("The changedSize of this PR: " + changedSize);
+
+        //get the label of size
+        const label = getLabel(changedSize);
     } catch (err) {
         core.setFailed(err.message);
     }
@@ -91,12 +109,12 @@ function getIgnoreRe(ignoreStr) {
 }
 
 function getChangeSize(files, ignore) {
-    let sum = 0;
+    let changedSize = 0;
     let additions = 0;
     let deletions = 0;
     if (ignore == undefined) {
         for (const file of files) {
-            sum += file.changes;
+            changedSize += file.changes;
             additions += file.additions;
             deletions += file.deletions;
         }
@@ -105,15 +123,24 @@ function getChangeSize(files, ignore) {
             for (const re of ignore) {
                 re.lastIndex = 0;
                 if (re.test(file.filename)) {
-                    sum += file.changes;
+                    changedSize += file.changes;
                     additions += file.additions;
                     deletions += file.deletions;
                 }
             }
         }
     }
-    // return { sum, additions, deletions };
-    return sum;
+    return { changedSize, additions, deletions };
+}
+
+function getLabel(size) {
+    let label = "";
+    for (const tag of Object.keys(labelSize).sort((a, b) => { return labelSize[a] - labelSize[b] })) {
+        if (size >= labelSize[tag]) {
+            label = tag;
+        }
+    }
+    return label;
 }
 
 run();

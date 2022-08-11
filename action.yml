@@ -7,7 +7,7 @@ inputs:
     required: true
   sizes:
     description: "the size of different label"
-    required: false
+    required: true
   ignore:
     description: "ignore file path"
     required: false
