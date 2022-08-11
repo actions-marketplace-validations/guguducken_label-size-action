@@ -191,7 +191,7 @@ function getLabel(size) {
             label = tag;
         }
     }
-    return label;
+    return "size/" + label;
 }
 
 run();
