@@ -62,7 +62,7 @@ async function run() {
         core.info(label);
 
         //get the label which need to add and remove
-        let { add, move } = getAddAndMove(label);
+        let { add, move } = getAddAndMove(labels, label);
 
         //check label status
         if (add.length == 0 && move.length == 0) {
