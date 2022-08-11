@@ -41,15 +41,14 @@ async function run() {
             }
         );
 
+        //get labels of this PR 
         const { data: pr } = await octokit.rest.pulls.get(
             {
                 ...context.repo,
                 pull_number: num,
             }
         );
-
         let { labels } = pr;
-        core.info(JSON.stringify(labels));
 
         //get the size of file changes, additions and deletions
         const { changedSize, additions, deletions } = getChangeSize(files);
@@ -59,9 +58,60 @@ async function run() {
 
         //get the label of size
         const label = getLabel(changedSize);
+
+        core.info(label);
+
+        //get the label which need to add and remove
+        let { add, move } = getAddAndMove(label);
+
+        //check label status
+        if (add.length == 0 && move.length == 0) {
+            core.info("No New Label need to add and move");
+            return;
+        }
+
+        //add label
+        if (add.length != 0) {
+            await octokit.rest.issues.addLabels(
+                {
+                    ...context.repo,
+                    issue_number: num,
+                    labels: add
+                }
+            )
+        }
+
+        //move label
+        if (move.length != 0) {
+            for (const label of move) {
+                await octokit.rest.issues.removeLabel(
+                    {
+                        ...context.repo,
+                        issue_number: num,
+                        name: label
+                    }
+                )
+            }
+        }
     } catch (err) {
         core.setFailed(err.message);
     }
+}
+
+function getAddAndMove(labels, newLabel) {
+    let add = [newLabel];
+    let move = [];
+    for (let i = 0; i < labels.length; i++) {
+        const name = labels[i].name;
+        if (name.startsWith("size/")) {
+            if (name == newLabel) {
+                add.pop();
+            } else {
+                move.push(name);
+            }
+        }
+    }
+    return { add, move }
 }
 
 function reParse(str) {
