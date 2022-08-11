@@ -3,7 +3,7 @@ const github = require('@actions/github');
 
 const github_token = core.getInput("size_token", { required: true });
 const ignoreStr = core.getInput('ignore');
-const labelSize = JSON.parse(core.getInput('size'));
+const labelSize = core.getInput('size');
 
 async function run() {
 
