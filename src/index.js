@@ -156,6 +156,9 @@ function getIgnoreRe(ignoreStr) {
     for (const re of set_re) {
         ans_re.push(new RegExp(re, "igm"));
     }
+    for (const it of ans_re) {
+        core.info(it.toString());
+    }
     return ans_re
 }
 
@@ -171,7 +174,7 @@ function getChangeSize(files, ignore) {
         }
     } else {
         for (const file of files) {
-            for (const re of ignore) {
+            for (let re of ignore) {
                 re.lastIndex = 0;
                 if (re.test(file.filename)) {
                     changedSize += file.changes;
