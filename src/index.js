@@ -109,7 +109,8 @@ function getChangeSize(files, ignore) {
             }
         }
     }
-    return { sum, additions, deletions };
+    // return { sum, additions, deletions };
+    return sum;
 }
 
 run();
