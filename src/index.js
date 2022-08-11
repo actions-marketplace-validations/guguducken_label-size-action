@@ -132,7 +132,6 @@ function getIgnoreRe(ignoreStr) {
     if (ignoreStr === "") {
         return undefined;
     }
-    core.info(ignoreStr);
     let set_re = new Set();
     let t = "";
     for (let i = 0; i < ignoreStr.length; i++) {
@@ -157,9 +156,6 @@ function getIgnoreRe(ignoreStr) {
     for (const re of set_re) {
         ans_re.push(new RegExp(re, "igm"));
     }
-    for (const it of ans_re) {
-        core.info(it.toString());
-    }
     return ans_re
 }
 
@@ -177,7 +173,7 @@ function getChangeSize(files, ignore) {
         for (const file of files) {
             for (let re of ignore) {
                 re.lastIndex = 0;
-                if (re.test(file.filename)) {
+                if (!re.test(file.filename)) {
                     changedSize += file.changes;
                     additions += file.additions;
                     deletions += file.deletions;
