@@ -1,9 +1,6 @@
 name: "Auto add size label"
 description: "Add labels based on pull request change sizes"
-# inputs:
-#   sizes:
-#     description: "Custom size configuration"
-#     required: false
+
 inputs:
   size_token:
     description: "GitHub token for access GitHub repository"
@@ -14,6 +11,7 @@ inputs:
   ignore:
     description: "ignore file path"
     required: false
+
 runs:
   using: "node16"
   main: "src/index.js"
