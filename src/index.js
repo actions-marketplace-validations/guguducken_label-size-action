@@ -2,8 +2,8 @@ const core = require('@actions/core');
 const github = require('@actions/github');
 
 const github_token = core.getInput("size_token", { required: true });
-const ignoreStr = core.getInput('ignore');
-const labelSize = core.getInput('size');
+const ignoreStr = core.getInput("ignore");
+const labelSize = core.getInput("sizes");
 
 async function run() {
 
