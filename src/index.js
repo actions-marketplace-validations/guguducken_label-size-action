@@ -132,6 +132,7 @@ function getIgnoreRe(ignoreStr) {
     if (ignoreStr === "") {
         return undefined;
     }
+    core.info(ignoreStr);
     let set_re = new Set();
     let t = "";
     for (let i = 1; i < ignoreStr.length - 1; i++) {
