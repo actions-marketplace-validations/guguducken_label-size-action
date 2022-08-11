@@ -37,6 +37,9 @@ async function run() {
         core.info(changeSize);
         core.info("-----------------------------------------------------");
         core.info(labelSize);
+        core.info("-----------------------------------------------------");
+        let ans = JSON.parse(labelSize);
+        core.info(ans.s);
     } catch (err) {
         core.setFailed(err.message);
     }
