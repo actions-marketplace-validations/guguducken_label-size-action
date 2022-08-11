@@ -51,7 +51,7 @@ async function run() {
         let { labels } = pr;
 
         //get the size of file changes, additions and deletions
-        const { changedSize, additions, deletions } = getChangeSize(files);
+        const { changedSize, additions, deletions } = getChangeSize(files, ignore_re);
         core.info("The additions of this PR: " + additions);
         core.info("The deletions of this PR: " + deletions);
         core.info("The changedSize of this PR: " + changedSize);
@@ -175,7 +175,6 @@ function getChangeSize(files, ignore) {
         }
     } else {
         for (const file of files) {
-            core.info(file.filename.toString());
             for (let re of ignore) {
                 re.lastIndex = 0;
                 if (re.test(file.filename)) {
