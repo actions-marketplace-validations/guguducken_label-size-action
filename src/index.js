@@ -175,7 +175,7 @@ function getChangeSize(files, ignore) {
         }
     } else {
         for (const file of files) {
-            core.info(file.filename);
+            core.info(file.filename.toString());
             for (let re of ignore) {
                 re.lastIndex = 0;
                 if (re.test(file.filename)) {
