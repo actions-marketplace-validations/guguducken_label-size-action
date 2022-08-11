@@ -11,6 +11,9 @@ inputs:
   sizes:
     description: "the size of different label"
     required: false
+  ignore:
+    description: "ignore file path"
+    required: false
 runs:
   using: "node16"
   main: "src/index.js"

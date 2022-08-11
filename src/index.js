@@ -15,17 +15,13 @@ async function run() {
         //get pull request num
         const num = context.payload?.pull_request?.number;
 
-        const { data: pr } = await octokit.rest.pulls.get(
+        const { data: files } = await octokit.rest.pulls.listFiles(
             {
                 ...context.repo,
                 pull_number: num,
             }
         );
-        core.info(JSON.stringify(pr));
-        core.info("-------------------------------------------");
-        const { path, additions, deletions } = pr;
-        core.info(JSON.stringify(path) + " " + JSON.stringify(additions) + " " + JSON.stringify(deletions));
-        // const { labels } = pr;
+        core.info(JSON.stringify(files));
     } catch (err) {
         core.setFailed(err.message);
     }
