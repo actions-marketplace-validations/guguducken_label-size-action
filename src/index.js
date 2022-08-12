@@ -90,17 +90,6 @@ async function run() {
         core.info("The label to be add is: " + add);
         core.info("The label to be remove is: " + move);
 
-        //add label
-        if (add.length != 0) {
-            await octokit.rest.issues.addLabels(
-                {
-                    ...context.repo,
-                    issue_number: num,
-                    labels: add
-                }
-            )
-        }
-
         //move label
         if (move.length != 0) {
             for (const label of move) {
@@ -112,6 +101,17 @@ async function run() {
                     }
                 )
             }
+        }
+
+        //add label
+        if (add.length != 0) {
+            await octokit.rest.issues.addLabels(
+                {
+                    ...context.repo,
+                    issue_number: num,
+                    labels: add
+                }
+            )
         }
         core.info("----------------------------Labeler Finish---------------------------");
     } catch (err) {
@@ -125,7 +125,7 @@ function getAddAndMove(labels, newLabel) {
     for (let i = 0; i < labels.length; i++) {
         const { name } = labels[i];
         if (name.startsWith("size/")) {
-            if (name == newLabel) {
+            if (toLowerCase(name) == newLabel) {
                 add.pop();
             } else {
                 move.push(name);
@@ -215,7 +215,7 @@ function getLabel(size, labelSize) {
             label = tag;
         }
     }
-    return "size/" + label;
+    return "size/" + toLowerCase(label);
 }
 
 run();
