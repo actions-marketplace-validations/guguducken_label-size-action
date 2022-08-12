@@ -31,6 +31,8 @@ async function run() {
         core.info(`The target repository name is: ` + repo_name);
         core.info(`The owner of this repository is: ` + repo_owner);
         core.info(`The PR number of this job is: ` + num);
+
+        //get ignore file RegExp
         let ignore_re = getIgnoreRe(ignoreStr);
 
         //get files
@@ -52,6 +54,7 @@ async function run() {
 
         //get the size of file changes, additions and deletions
         const { changedSize, additions, deletions } = getChangeSize(files, ignore_re);
+        core.info("----------------------------Changed Sizes---------------------------");
         core.info("The additions of this PR: " + additions);
         core.info("The deletions of this PR: " + deletions);
         core.info("The changedSize of this PR: " + changedSize);
@@ -59,16 +62,18 @@ async function run() {
         //get the label of size
         const label = getLabel(changedSize);
 
-        core.info(label);
-
         //get the label which need to add and remove
         let { add, move } = getAddAndMove(labels, label);
 
         //check label status
         if (add.length == 0 && move.length == 0) {
-            core.info("No New Label need to add and move");
+            core.info("No New Label need to add or move");
             return;
         }
+
+        core.info("----------------------------Labeler Names---------------------------");
+        core.info("The label to be add is: " + add);
+        core.info("The label to be remove is: " + move);
 
         //add label
         if (add.length != 0) {
@@ -93,6 +98,7 @@ async function run() {
                 )
             }
         }
+        core.info("----------------------------Labeler Finish---------------------------");
     } catch (err) {
         core.setFailed(err.message);
     }
@@ -170,6 +176,7 @@ function getChangeSize(files, ignore) {
             deletions += file.deletions;
         }
     } else {
+        core.info("---------------------------- Files Ignore ---------------------------");
         for (const file of files) {
             for (let re of ignore) {
                 re.lastIndex = 0;
@@ -177,6 +184,8 @@ function getChangeSize(files, ignore) {
                     changedSize += file.changes;
                     additions += file.additions;
                     deletions += file.deletions;
+                } else {
+                    core.info("The ignore file is: " + file.filename);
                 }
             }
         }
