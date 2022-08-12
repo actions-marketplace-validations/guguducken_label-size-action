@@ -125,7 +125,7 @@ function getAddAndMove(labels, newLabel) {
     for (let i = 0; i < labels.length; i++) {
         const { name } = labels[i];
         if (name.startsWith("size/")) {
-            if (name.toUpperCase() == newLabel) {
+            if (name.toUpperCase() == newLabel.toUpperCase()) {
                 add.pop();
             } else {
                 move.push(name);
