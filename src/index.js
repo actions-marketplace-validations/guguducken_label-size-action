@@ -3,7 +3,17 @@ const github = require('@actions/github');
 
 const github_token = core.getInput("size_token", { required: true });
 const ignoreStr = core.getInput("ignore");
-const labelSize = JSON.parse(core.getInput("sizes"));
+const sizes = core.getInput("sizes");
+
+const defaultSzie = {
+    "xs": 0,
+    "s": 10,
+    "m": 100,
+    "l": 500,
+    "xl": 1000,
+    "xxl": 2000,
+}
+
 
 async function run() {
 
@@ -59,15 +69,20 @@ async function run() {
         core.info("The deletions of this PR: " + deletions);
         core.info("The changedSize of this PR: " + changedSize);
 
+
+        const labelSize = JSON.parse(sizes) || defaultSzie;
+
         //get the label of size
-        const label = getLabel(changedSize);
+        const label = getLabel(changedSize, labelSize);
 
         //get the label which need to add and remove
         let { add, move } = getAddAndMove(labels, label);
 
         //check label status
         if (add.length == 0 && move.length == 0) {
-            core.info("No New Label need to add or move");
+            core.info("----------------------------Labeler Names---------------------------");
+            core.info("No New Label need to add or move!");
+            core.info("----------------------------Labeler Finish---------------------------");
             return;
         }
 
@@ -193,7 +208,7 @@ function getChangeSize(files, ignore) {
     return { changedSize, additions, deletions };
 }
 
-function getLabel(size) {
+function getLabel(size, labelSize) {
     let label = "";
     for (const tag of Object.keys(labelSize).sort((a, b) => { return labelSize[a] - labelSize[b] })) {
         if (size >= labelSize[tag]) {
