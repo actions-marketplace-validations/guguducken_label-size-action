@@ -6,12 +6,12 @@ const ignoreStr = core.getInput("ignore");
 const sizes = core.getInput("sizes");
 
 const defaultSzie = {
-    "xs": 0,
-    "s": 10,
-    "m": 100,
-    "l": 500,
-    "xl": 1000,
-    "xxl": 2000,
+    "XS": 0,
+    "S": 10,
+    "M": 100,
+    "L": 500,
+    "XL": 1000,
+    "XXL": 2000,
 }
 
 
@@ -125,7 +125,7 @@ function getAddAndMove(labels, newLabel) {
     for (let i = 0; i < labels.length; i++) {
         const { name } = labels[i];
         if (name.startsWith("size/")) {
-            if (name.toLowerCase() == newLabel) {
+            if (name.toUpperCase() == newLabel) {
                 add.pop();
             } else {
                 move.push(name);
@@ -215,7 +215,7 @@ function getLabel(size, labelSize) {
             label = tag;
         }
     }
-    return "size/" + label.toLowerCase();
+    return "size/" + label.toUpperCase();
 }
 
 run();
