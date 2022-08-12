@@ -125,7 +125,7 @@ function getAddAndMove(labels, newLabel) {
     for (let i = 0; i < labels.length; i++) {
         const { name } = labels[i];
         if (name.startsWith("size/")) {
-            if (toLowerCase(name) == newLabel) {
+            if (name.toLowerCase() == newLabel) {
                 add.pop();
             } else {
                 move.push(name);
@@ -215,7 +215,7 @@ function getLabel(size, labelSize) {
             label = tag;
         }
     }
-    return "size/" + toLowerCase(label);
+    return "size/" + label.toLowerCase();
 }
 
 run();
