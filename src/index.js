@@ -173,7 +173,7 @@ function getChangeSize(files, ignore) {
         for (const file of files) {
             for (let re of ignore) {
                 re.lastIndex = 0;
-                if (!re.test(file.filename) && re.lastIndex == file.filename.length) {
+                if (!(re.test(file.filename) && re.lastIndex == file.filename.length)) {
                     changedSize += file.changes;
                     additions += file.additions;
                     deletions += file.deletions;
