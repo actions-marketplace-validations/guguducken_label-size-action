@@ -193,15 +193,20 @@ function getChangeSize(files, ignore) {
     } else {
         core.info("---------------------------- Files Ignore ---------------------------");
         for (const file of files) {
+            let flag = false;
             for (let re of ignore) {
                 re.lastIndex = 0;
-                if (!(re.test(file.filename) && re.lastIndex == file.filename.length)) {
-                    changedSize += file.changes;
-                    additions += file.additions;
-                    deletions += file.deletions;
-                } else {
-                    core.info("The ignore file is: " + file.filename);
+                if (re.test(file.filename) && re.lastIndex == file.filename.length) {
+                    flag = true;
+                    break;
                 }
+            }
+            if (flag) {
+                core.info("The ignore file is: " + file.filename);
+            } else {
+                changedSize += file.changes;
+                additions += file.additions;
+                deletions += file.deletions;
             }
         }
     }
